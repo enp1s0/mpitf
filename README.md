@@ -6,6 +6,7 @@
 ## Sample
 
 ```cpp
+#include <iostream.hpp>
 #include <mpi_local_rank.hpp>
 
 int main(int argc, char** argv) {
