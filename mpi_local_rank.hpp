@@ -7,6 +7,18 @@
 #include <unistd.h>
 
 namespace mtk {
+inline int get_comm_rank(const MPI_Comm mpi_comm) {
+	int rank;
+	MPI_Comm_rank(mpi_comm, &rank);
+	return rank;
+}
+
+inline int get_comm_size(const MPI_Comm mpi_comm) {
+	int size;
+	MPI_Comm_size(mpi_comm, &size);
+	return size;
+}
+
 inline int get_size_within_node(const MPI_Comm mpi_comm) {
 	const std::size_t hostname_max_size = 256;
 	char hostname[hostname_max_size];
@@ -18,9 +30,8 @@ inline int get_size_within_node(const MPI_Comm mpi_comm) {
 		hash = hash * 16437 + static_cast<std::uint64_t>(hostname[i]);
 	}
 
-	int nprocs, rank;
-	MPI_Comm_size(mpi_comm, &nprocs);
-	MPI_Comm_rank(mpi_comm, &rank);
+	const int nprocs = mtk::get_comm_size(mpi_comm);
+	const int rank = mtk::get_comm_rank(mpi_comm);
 
 	std::unique_ptr<std::uint64_t[]> hash_table(new std::uint64_t [nprocs]);
 
@@ -47,9 +58,8 @@ inline int get_rank_within_node(const MPI_Comm mpi_comm) {
 		hash = hash * 16437 + static_cast<std::uint64_t>(hostname[i]);
 	}
 
-	int nprocs, rank;
-	MPI_Comm_size(mpi_comm, &nprocs);
-	MPI_Comm_rank(mpi_comm, &rank);
+	const int nprocs = mtk::get_comm_size(mpi_comm);
+	const int rank = mtk::get_comm_rank(mpi_comm);
 
 	std::unique_ptr<std::uint64_t[]> hash_table(new std::uint64_t [nprocs]);
 
@@ -63,18 +73,6 @@ inline int get_rank_within_node(const MPI_Comm mpi_comm) {
 	}
 
 	return local_rank;
-}
-
-inline int get_comm_rank(const MPI_Comm mpi_comm) {
-	int rank;
-	MPI_Comm_rank(mpi_comm, &rank);
-	return rank;
-}
-
-inline int get_comm_size(const MPI_Comm mpi_comm) {
-	int size;
-	MPI_Comm_size(mpi_comm, &size);
-	return size;
 }
 } // namespace mtk
 
