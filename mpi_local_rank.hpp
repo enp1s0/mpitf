@@ -70,6 +70,12 @@ inline int get_comm_rank(const MPI_Comm mpi_comm) {
 	MPI_Comm_rank(mpi_comm, &rank);
 	return rank;
 }
+
+inline int get_comm_size(const MPI_Comm mpi_comm) {
+	int size;
+	MPI_Comm_size(mpi_comm, &size);
+	return size;
+}
 } // namespace mtk
 
 #endif /* end of include guard */
