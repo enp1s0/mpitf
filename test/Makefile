@@ -4,3 +4,6 @@ TARGET=local_rank_test
 
 $(TARGET):main.cpp
 	$(CXX) $(CXXFLAGS) -o $@ $<
+
+clean:
+	rm -f $(TARGET)
