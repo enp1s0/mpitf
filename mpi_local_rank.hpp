@@ -64,6 +64,12 @@ inline int get_rank_within_node(const MPI_Comm mpi_comm) {
 
 	return local_rank;
 }
+
+inline int get_comm_rank(const MPI_Comm mpi_comm) {
+	int rank;
+	MPI_Comm_rank(mpi_comm, &rank);
+	return rank;
+}
 } // namespace mtk
 
 #endif /* end of include guard */
