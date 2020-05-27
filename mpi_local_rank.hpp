@@ -1,5 +1,5 @@
-#ifndef __MPI_LOCAL_RANK_HPP__
-#define __MPI_LOCAL_RANK_HPP__
+#ifndef __MPITF_HPP__
+#define __MPITF_HPP__
 #include <cstddef>
 #include <cstdint>
 #include <memory>
