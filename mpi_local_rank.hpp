@@ -7,6 +7,30 @@
 #include <unistd.h>
 
 namespace mtk {
+template <class T>
+inline MPI_Datatype get_data_type();
+template <> inline MPI_Datatype get_data_type<char          >() {return MPI_CHAR          ;};
+template <> inline MPI_Datatype get_data_type<signed char   >() {return MPI_SIGNED_CHAR   ;};
+template <> inline MPI_Datatype get_data_type<unsigned char >() {return MPI_UNSIGNED_CHAR ;};
+template <> inline MPI_Datatype get_data_type<wchar_t       >() {return MPI_WCHAR         ;};
+template <> inline MPI_Datatype get_data_type<short         >() {return MPI_SHORT         ;};
+template <> inline MPI_Datatype get_data_type<unsigned short>() {return MPI_UNSIGNED_SHORT;};
+template <> inline MPI_Datatype get_data_type<int           >() {return MPI_INT           ;};
+template <> inline MPI_Datatype get_data_type<unsigned      >() {return MPI_UNSIGNED      ;};
+template <> inline MPI_Datatype get_data_type<long          >() {return MPI_LONG          ;};
+template <> inline MPI_Datatype get_data_type<unsigned long >() {return MPI_UNSIGNED_LONG ;};
+template <> inline MPI_Datatype get_data_type<float         >() {return MPI_FLOAT         ;};
+template <> inline MPI_Datatype get_data_type<double        >() {return MPI_DOUBLE        ;};
+template <> inline MPI_Datatype get_data_type<long double   >() {return MPI_LONG_DOUBLE   ;};
+//template <> inline MPI_Datatype get_data_type<int8_t        >() {return MPI_INT8_T        ;};
+//template <> inline MPI_Datatype get_data_type<int16_t       >() {return MPI_INT16_T       ;};
+//template <> inline MPI_Datatype get_data_type<int32_t       >() {return MPI_INT32_T       ;};
+//template <> inline MPI_Datatype get_data_type<int64_t       >() {return MPI_INT64_T       ;};
+//template <> inline MPI_Datatype get_data_type<uint8_t       >() {return MPI_UINT8_T       ;};
+//template <> inline MPI_Datatype get_data_type<uint16_t      >() {return MPI_UINT16_T      ;};
+//template <> inline MPI_Datatype get_data_type<uint32_t      >() {return MPI_UINT32_T      ;};
+//template <> inline MPI_Datatype get_data_type<uint64_t      >() {return MPI_UINT64_T      ;};
+
 inline int get_comm_rank(const MPI_Comm mpi_comm) {
 	int rank;
 	MPI_Comm_rank(mpi_comm, &rank);
