@@ -6,7 +6,7 @@
 #include <mpi.h>
 #include <unistd.h>
 
-namespace mtk {
+namespace mpitf {
 template <class T>
 inline MPI_Datatype get_data_type();
 template <> inline MPI_Datatype get_data_type<char          >() {return MPI_CHAR          ;};
@@ -98,6 +98,6 @@ inline int get_rank_within_node(const MPI_Comm mpi_comm) {
 
 	return local_rank;
 }
-} // namespace mtk
+} // namespace mpitf
 
 #endif /* end of include guard */
