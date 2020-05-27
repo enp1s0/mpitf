@@ -54,8 +54,8 @@ inline int get_size_within_node(const MPI_Comm mpi_comm) {
 		hash = hash * 16437 + static_cast<std::uint64_t>(hostname[i]);
 	}
 
-	const int nprocs = mtk::get_comm_size(mpi_comm);
-	const int rank = mtk::get_comm_rank(mpi_comm);
+	const int nprocs = mpitf::get_comm_size(mpi_comm);
+	const int rank = mpitf::get_comm_rank(mpi_comm);
 
 	std::unique_ptr<std::uint64_t[]> hash_table(new std::uint64_t [nprocs]);
 
@@ -82,8 +82,8 @@ inline int get_rank_within_node(const MPI_Comm mpi_comm) {
 		hash = hash * 16437 + static_cast<std::uint64_t>(hostname[i]);
 	}
 
-	const int nprocs = mtk::get_comm_size(mpi_comm);
-	const int rank = mtk::get_comm_rank(mpi_comm);
+	const int nprocs = mpitf::get_comm_size(mpi_comm);
+	const int rank = mpitf::get_comm_rank(mpi_comm);
 
 	std::unique_ptr<std::uint64_t[]> hash_table(new std::uint64_t [nprocs]);
 
