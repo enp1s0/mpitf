@@ -3,10 +3,35 @@
 #include <cstddef>
 #include <cstdint>
 #include <memory>
+#include <sstream>
 #include <mpi.h>
 #include <unistd.h>
 
+#ifndef MPITF_HANDLE_ERROR
+#define MPITF_HANDLE_ERROR(status) mpitf::error::check(status, __FILE__, __LINE__, __func__)
+#endif
+#ifndef MPITF_HANDLE_ERROR_M
+#define MPITF_HANDLE_ERROR_M(status, message) mpitf::error::check(status, __FILE__, __LINE__, __func__, message)
+#endif
+
 namespace mpitf {
+namespace error {
+void check(const int status, const std::string filename, const std::size_t line, const std::string funcname, const std::string message = "") {
+	if (status != MPI_SUCCESS) {
+		char* error_string;
+		int error_string_length;
+		MPI_Error_string(status, error_string, &error_string_length);
+	
+		std::stringstream ss;
+		ss << error_string;
+		if(message.length() != 0){
+			ss<<" : "<<message;
+		}
+	    ss<<" ["<<filename<<":"<<line<<" in "<<funcname<<"]";
+		throw std::runtime_error(ss.str());
+	}
+}
+} // namespace error
 template <class T>
 inline MPI_Datatype get_data_type();
 template <> inline MPI_Datatype get_data_type<char          >() {return MPI_CHAR          ;};

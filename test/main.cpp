@@ -15,7 +15,7 @@ int main(int argc, char** argv) {
 	using data_t = int;
 	data_t send = rank;
 	data_t recv = 0;
-	MPI_Allreduce(&send, &recv, 1, mpitf::get_data_type<data_t>(), MPI_SUM, MPI_COMM_WORLD);
+	MPITF_HANDLE_ERROR(MPI_Allreduce(&send, &recv, 1, mpitf::get_data_type<data_t>(), MPI_SUM, MPI_COMM_WORLD));
 	std::cout << "Allreduce sum = " << recv <<std::endl;
 
 	MPI_Finalize();
