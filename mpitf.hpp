@@ -17,7 +17,7 @@
 namespace mpitf {
 namespace error {
 void check(const int status, const std::string filename, const std::size_t line, const std::string funcname, const std::string message = "") {
-	if (status != 0) {
+	if (status != MPI_SUCCESS) {
 		char* error_string;
 		int error_string_length;
 		MPI_Error_string(status, error_string, &error_string_length);
