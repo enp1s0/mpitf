@@ -8,8 +8,8 @@ mpitf is a tiny MPI template library.
 
 ### Original functions
 #### Get a rank and size within a node
-- `mpitf::get_rank_within_node(MPI_COMM_WORLD)`
-- `mpitf::get_size_within_node(MPI_COMM_WORLD)`
+- `mpitf::get_rank_within_node(MPI_Comm)`
+- `mpitf::get_size_within_node(MPI_Comm)`
 
 These functions distinguish nodes using their host name.
 
