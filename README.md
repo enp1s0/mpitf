@@ -1,3 +1,5 @@
+<img src="./docs/mpitf.svg" width=60>
+
 # MPI Template Functions
 
 ## Introduction
