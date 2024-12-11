@@ -16,7 +16,7 @@
 
 namespace mpitf {
 namespace error {
-inline void check(const int status, const std::string filename, const std::size_t line, const std::string funcname, const std::string message = "") {
+inline void check(const int status, const std::string filename, const std::uint64_t line, const std::string funcname, const std::string message = "") {
 	if (status != MPI_SUCCESS) {
 		char error_string[MPI_MAX_ERROR_STRING];
 		int error_string_length;
@@ -56,19 +56,20 @@ template <> inline MPI_Datatype get_data_type<long double   >() {return MPI_LONG
 //template <> inline MPI_Datatype get_data_type<uint32_t      >() {return MPI_UINT32_T      ;};
 //template <> inline MPI_Datatype get_data_type<uint64_t      >() {return MPI_UINT64_T      ;};
 
-inline int get_comm_rank(const MPI_Comm mpi_comm) {
+inline std::uint64_t get_comm_rank(const MPI_Comm mpi_comm) {
 	int rank;
 	MPI_Comm_rank(mpi_comm, &rank);
 	return rank;
 }
 
-inline int get_comm_size(const MPI_Comm mpi_comm) {
+inline std::uint64_t get_comm_size(const MPI_Comm mpi_comm) {
 	int size;
 	MPI_Comm_size(mpi_comm, &size);
 	return size;
 }
 
-inline int get_size_within_node(const MPI_Comm mpi_comm) {
+namespace detail {
+inline std::uint64_t hostname_hash() {
 	const std::size_t hostname_max_size = 256;
 	char hostname[hostname_max_size];
 
@@ -79,15 +80,21 @@ inline int get_size_within_node(const MPI_Comm mpi_comm) {
 		hash = hash * 16437 + static_cast<std::uint64_t>(hostname[i]);
 	}
 
-	const int nprocs = mpitf::get_comm_size(mpi_comm);
-	const int rank = mpitf::get_comm_rank(mpi_comm);
+  return hash;
+}
+} // namespace detail
+
+inline int get_size_within_node(const MPI_Comm mpi_comm) {
+  const auto hash = detail::hostname_hash();
+
+	const std::uint64_t nprocs = mpitf::get_comm_size(mpi_comm);
 
 	std::unique_ptr<std::uint64_t[]> hash_table(new std::uint64_t [nprocs]);
 
 	MPI_Allgather(&hash, 1, MPI_LONG_LONG, hash_table.get(), 1, MPI_LONG_LONG, mpi_comm);
 
 	int local_size = 0;
-	for(std::size_t i = 0; i < nprocs; i++) {
+	for(std::uint64_t i = 0; i < nprocs; i++) {
 		if(hash_table.get()[i] == hash) {
 			local_size++;
 		}
@@ -97,25 +104,17 @@ inline int get_size_within_node(const MPI_Comm mpi_comm) {
 }
 
 inline int get_rank_within_node(const MPI_Comm mpi_comm) {
-	const std::size_t hostname_max_size = 256;
-	char hostname[hostname_max_size];
+  const auto hash = detail::hostname_hash();
 
-	gethostname(hostname, hostname_max_size);
-
-	std::uint64_t hash = 2999;
-	for(std::size_t i = 0; (i < hostname_max_size) && (hostname[i] != '\0'); i++) {
-		hash = hash * 16437 + static_cast<std::uint64_t>(hostname[i]);
-	}
-
-	const int nprocs = mpitf::get_comm_size(mpi_comm);
-	const int rank = mpitf::get_comm_rank(mpi_comm);
+	const std::uint64_t nprocs = mpitf::get_comm_size(mpi_comm);
+	const std::uint64_t rank = mpitf::get_comm_rank(mpi_comm);
 
 	std::unique_ptr<std::uint64_t[]> hash_table(new std::uint64_t [nprocs]);
 
 	MPI_Allgather(&hash, 1, MPI_LONG_LONG, hash_table.get(), 1, MPI_LONG_LONG, mpi_comm);
 
 	int local_rank = 0;
-	for(std::size_t i = 0; i < rank; i++) {
+	for(std::uint64_t i = 0; i < rank; i++) {
 		if(hash_table.get()[i] == hash) {
 			local_rank++;
 		}
